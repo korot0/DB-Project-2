@@ -5,7 +5,7 @@ CREATE TABLE PUBLISHER (
 );
 
 CREATE TABLE BOOK (
-  book_id INT PRIMARY KEY,
+  book_id INTEGER PRIMARY KEY AUTOINCREMENT,
   title TEXT NOT NULL,
   publisher_name TEXT NOT NULL,
   FOREIGN KEY (publisher_name) REFERENCES PUBLISHER(publisher_name)
