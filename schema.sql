@@ -1,7 +1,7 @@
 CREATE TABLE PUBLISHER (
   publisher_name TEXT PRIMARY KEY,
-  phone TEXT NOT NULL,
-  address TEXT NOT NULL
+  phone TEXT,
+  address TEXT
 );
 
 CREATE TABLE BOOK (
@@ -12,7 +12,7 @@ CREATE TABLE BOOK (
 );
 
 CREATE TABLE LIBRARY_BRANCH (
-  branch_id INT PRIMARY KEY,
+  branch_id INTEGER PRIMARY KEY AUTOINCREMENT,
   branch_name TEXT NOT NULL,
   branch_address TEXT NOT NULL
 );
