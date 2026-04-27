@@ -149,6 +149,10 @@ h2 {
   background: var(--color-surface);
 }
 
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(0.7);
+}
+
 /* Button */
 .btn-primary {
   align-self: flex-start;
