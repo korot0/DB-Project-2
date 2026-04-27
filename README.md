@@ -100,3 +100,40 @@ Once your backend is running, go into your `index.html` and add event listeners 
 4. Loop through the results and build `<tr>` rows to inject into the result table
 
 Docs: [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)
+
+---
+
+## Concepts Reference
+
+### Node.js
+
+- `require()` — importing modules and your own files
+- `process.env` — optionally storing your port number as an environment variable
+
+### Express
+
+- `express()` — creating the app
+- `app.use()` — registering middleware and routers
+- `app.listen()` — starting the server
+- `express.json()` — parsing incoming request bodies
+- `express.static()` — serving your `public/` folder
+- `express.Router()` — creating a router in each route file
+- `router.get()` / `router.post()` — defining routes
+- `req.body` — reading data sent from your frontend (POST)
+- `req.query` — reading URL parameters like `?title=Dune` (GET)
+- `res.json()` — sending results back to the frontend
+- `res.status()` — sending error codes if something goes wrong
+
+### better-sqlite3
+
+- `new Database()` — opening your `library.db` file
+- `db.prepare()` — preparing a SQL statement before running it
+- `.run()` — executing INSERT/UPDATE statements
+- `.get()` — fetching a single row
+- `.all()` — fetching multiple rows
+- `db.transaction()` — wrapping multiple inserts in one atomic operation (used in `book.js`)
+- `info.lastInsertRowid` — getting the auto-generated ID after an INSERT (used in `borrower.js`)
+
+### cors
+
+- `cors()` — one single middleware call in `server.js`, that's it. You won't touch it again after setup.
