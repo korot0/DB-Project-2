@@ -6,6 +6,7 @@
     <title>LMS Rental Project</title>
     <link rel="stylesheet" href="./reset.css" />
     <link rel="stylesheet" href="./styles.css" />
+    <script src="index.js" defer></script>
   </head>
   <body>
     <div class="sidebar">
@@ -190,7 +191,9 @@
             </div>
           </div>
           <div>
-            <button class="btn-primary">Search</button>
+            <button class="btn-primary" onclick="copiesPerBranch()">
+              Search
+            </button>
           </div>
         </div>
         <div class="card">
@@ -351,22 +354,5 @@
       </div>
     </div>
     <!-- end .content -->
-
-    <script>
-      const buttons = document.querySelectorAll(".sidebar-btn");
-      const panels = document.querySelectorAll(".panel");
-
-      // Toggle displaying
-      buttons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          buttons.forEach((b) => b.classList.remove("active"));
-          panels.forEach((p) => p.classList.remove("active"));
-          btn.classList.add("active");
-          document
-            .getElementById("panel-" + btn.dataset.panel)
-            .classList.add("active");
-        });
-      });
-    </script>
   </body>
 </html>
