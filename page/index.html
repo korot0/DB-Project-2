@@ -9,16 +9,360 @@
   </head>
   <body>
     <div class="sidebar">
-      <h3>LMS PORTAL</h3>
+      <h2>LMS PORTAL</h2>
       <nav class="sidebar-btn-container">
-        <button class="sidebar-btn">Check out</button>
-        <button class="sidebar-btn">Add borrower</button>
-        <button class="sidebar-btn">Add book</button>
-        <button class="sidebar-btn">Copies per branch</button>
-        <button class="sidebar-btn">Late returns</button>
-        <button class="sidebar-btn">Late fee balances</button>
+        <button class="sidebar-btn" data-panel="borrower">Add borrower</button>
+        <button class="sidebar-btn" data-panel="book">Add book</button>
+        <button class="sidebar-btn" data-panel="copies">
+          Copies per branch
+        </button>
+        <button class="sidebar-btn" data-panel="late">Late returns</button>
+        <button class="sidebar-btn" data-panel="fees">Late fee balances</button>
       </nav>
     </div>
-    <div class="content"></div>
+
+    <div class="content">
+      <!-- Panel: Check out a book -->
+      <div class="panel active" id="panel-checkout">
+        <div class="panel-header">
+          <h1 class="panel-title">Check out a book</h1>
+        </div>
+        <div class="card">
+          <div class="form-group">
+            <label for="checkout-card">Card No</label>
+            <input type="text" id="checkout-card" placeholder="e.g. 1234" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="checkout-book">Book ID</label>
+              <input type="text" id="checkout-book" placeholder="e.g. 1001" />
+            </div>
+            <div class="form-group">
+              <label for="checkout-branch">Branch</label>
+              <select id="checkout-branch">
+                <option value="">-- select --</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="checkout-date-out">Date Out</label>
+              <input type="date" id="checkout-date-out" />
+            </div>
+            <div class="form-group">
+              <label for="checkout-due">Due Date</label>
+              <input type="date" id="checkout-due" />
+            </div>
+          </div>
+          <button class="btn-primary">Submit loan</button>
+        </div>
+        <div class="card">
+          <h2 class="card-title">Updated Book_Copies</h2>
+          <p class="card-sub">Reflects copy count after trigger fires</p>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Book ID</th>
+                  <th>Title</th>
+                  <th>Branch</th>
+                  <th>Copies</th>
+                </tr>
+              </thead>
+              <tbody id="checkout-results">
+                <tr>
+                  <td colspan="4" class="empty">Results will appear here</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel: Add borrower -->
+      <div class="panel" id="panel-borrower">
+        <div class="panel-header">
+          <h1 class="panel-title">Add a new borrower</h1>
+        </div>
+        <div class="card">
+          <div class="form-group">
+            <label for="borrower-name">Full Name</label>
+            <input type="text" id="borrower-name" placeholder="First Last" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="borrower-phone">Phone</label>
+              <input
+                type="text"
+                id="borrower-phone"
+                placeholder="(555) 000-0000"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="borrower-address">Address</label>
+            <input
+              type="text"
+              id="borrower-address"
+              placeholder="Street, City, State ZIP"
+            />
+          </div>
+          <button class="btn-primary">Register borrower</button>
+        </div>
+        <div class="card">
+          <h2 class="card-title">New library card issued</h2>
+          <p class="card-sub">
+            Auto-generated card number for the new borrower
+          </p>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Card No</th>
+                  <th>Name</th>
+                  <th>Address</th>
+                  <th>Phone</th>
+                </tr>
+              </thead>
+              <tbody id="borrower-results">
+                <tr>
+                  <td colspan="4" class="empty">Results will appear here</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel: Add book -->
+      <div class="panel" id="panel-book">
+        <div class="panel-header">
+          <h1 class="panel-title">Add a new book</h1>
+        </div>
+        <div class="card">
+          <div class="form-row">
+            <div class="form-group" style="flex: 2">
+              <label for="book-title">Title</label>
+              <input type="text" id="book-title" placeholder="Book title" />
+            </div>
+            <div class="form-group">
+              <label for="book-isbn">ISBN</label>
+              <input type="text" id="book-isbn" placeholder="978-..." />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="book-author-first">Author First Name</label>
+              <input type="text" id="book-author-first" />
+            </div>
+            <div class="form-group">
+              <label for="book-author-last">Author Last Name</label>
+              <input type="text" id="book-author-last" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="book-publisher">Publisher</label>
+            <select id="book-publisher">
+              <option value="">-- select existing --</option>
+            </select>
+          </div>
+          <button class="btn-primary">Add to all branches</button>
+        </div>
+      </div>
+
+      <!-- Panel: Copies per branch -->
+      <div class="panel" id="panel-copies">
+        <div class="panel-header">
+          <h1 class="panel-title">Copies per branch</h1>
+        </div>
+        <div class="card">
+          <div class="form-row">
+            <div class="form-group" style="flex: 2">
+              <label for="copies-title">Book Title</label>
+              <input
+                type="text"
+                id="copies-title"
+                placeholder="Enter title..."
+              />
+            </div>
+            <div style="display: flex; align-items: flex-end">
+              <button class="btn-primary">Search</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Branch ID</th>
+                  <th>Branch Name</th>
+                  <th>Copies Loaned Out</th>
+                </tr>
+              </thead>
+              <tbody id="copies-results">
+                <tr>
+                  <td colspan="3" class="empty">Results will appear here</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel: Late returns -->
+      <div class="panel" id="panel-late">
+        <div class="panel-header">
+          <h1 class="panel-title">Late returns</h1>
+        </div>
+        <div class="card">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="late-from">Due Date From</label>
+              <input type="date" id="late-from" />
+            </div>
+            <div class="form-group">
+              <label for="late-to">Due Date To</label>
+              <input type="date" id="late-to" />
+            </div>
+            <div style="display: flex; align-items: flex-end">
+              <button class="btn-primary">Search</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Card No</th>
+                  <th>Book Title</th>
+                  <th>Due Date</th>
+                  <th>Returned</th>
+                  <th>Days Late</th>
+                </tr>
+              </thead>
+              <tbody id="late-results">
+                <tr>
+                  <td colspan="5" class="empty">Results will appear here</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel: Late fee balances -->
+      <div class="panel" id="panel-fees">
+        <div class="panel-header">
+          <h1 class="panel-title">Late fee balances</h1>
+        </div>
+
+        <!-- 6a -->
+        <div class="card">
+          <h2 class="card-title">Search by borrower</h2>
+          <p class="card-sub">
+            Search by ID, name, partial name, or leave blank to return all
+            ordered by balance
+          </p>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fees-borrower-id">Borrower ID</label>
+              <input type="text" id="fees-borrower-id" placeholder="optional" />
+            </div>
+            <div class="form-group">
+              <label for="fees-borrower-name">Name / Partial Name</label>
+              <input
+                type="text"
+                id="fees-borrower-name"
+                placeholder="optional"
+              />
+            </div>
+            <div style="display: flex; align-items: flex-end">
+              <button class="btn-primary">Search</button>
+            </div>
+          </div>
+          <div class="table-wrapper" style="margin-top: 1rem">
+            <table>
+              <thead>
+                <tr>
+                  <th>Card No</th>
+                  <th>Name</th>
+                  <th>Late Fee Balance</th>
+                </tr>
+              </thead>
+              <tbody id="fees-borrower-results">
+                <tr>
+                  <td colspan="3" class="empty">Results will appear here</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 6b -->
+        <div class="card">
+          <h2 class="card-title">Search by book</h2>
+          <p class="card-sub">
+            Borrower ID is required. Book ID, title, or partial title are
+            optional
+          </p>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fees-book-borrower"
+                >Borrower ID <span class="required">*</span></label
+              >
+              <input
+                type="text"
+                id="fees-book-borrower"
+                placeholder="required"
+              />
+            </div>
+            <div class="form-group">
+              <label for="fees-book-search">Book ID / Title / Partial</label>
+              <input type="text" id="fees-book-search" placeholder="optional" />
+            </div>
+            <div style="display: flex; align-items: flex-end">
+              <button class="btn-primary">Search</button>
+            </div>
+          </div>
+          <div class="table-wrapper" style="margin-top: 1rem">
+            <table>
+              <thead>
+                <tr>
+                  <th>Card No</th>
+                  <th>Book Title</th>
+                  <th>Date Out</th>
+                  <th>Due Date</th>
+                  <th>Late Fee</th>
+                </tr>
+              </thead>
+              <tbody id="fees-book-results">
+                <tr>
+                  <td colspan="5" class="empty">Results will appear here</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end .content -->
+
+    <script>
+      const buttons = document.querySelectorAll(".sidebar-btn");
+      const panels = document.querySelectorAll(".panel");
+
+      buttons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          buttons.forEach((b) => b.classList.remove("active"));
+          panels.forEach((p) => p.classList.remove("active"));
+          btn.classList.add("active");
+          document
+            .getElementById("panel-" + btn.dataset.panel)
+            .classList.add("active");
+        });
+      });
+    </script>
   </body>
 </html>
