@@ -9,12 +9,12 @@ copiesRouter.get("/copies", (req, res) => {
   const rows = db
     .prepare(
       ` 
-SELECT LB.branch_id, LB.branch_name, COUNT(*) AS loaned_out
-FROM BOOK_LOANS BL
-JOIN BOOK B ON B.book_id = BL.book_id
-JOIN LIBRARY_BRANCH LB ON LB.branch_id = BL.branch_id
-WHERE B.title = ?
-GROUP BY LB.branch_id;
+      select lb.branch_id, lb.branch_name, count(*) as loaned_out
+      from book_loans bl
+      join book b on b.book_id = bl.book_id
+      join library_branch lb on lb.branch_id = bl.branch_id
+      where b.title = ?
+      group by lb.branch_id;
 `,
     )
     .all(title);
