@@ -25,7 +25,8 @@ for filename in os.listdir(csv_folder):
 
             placeholders = ", ".join(["?" for _ in columns])
             col_names = ", ".join(columns)
-            sql = f"INSERT INTO {table_name} ({col_names}) VALUES ({placeholders})"
+            # Ignore rows that already exist so the loader can be rerun safely.
+            sql = f"INSERT OR IGNORE INTO {table_name} ({col_names}) VALUES ({placeholders})"
 
             for row in reader:
                 values = [row[col] for col in reader.fieldnames]
