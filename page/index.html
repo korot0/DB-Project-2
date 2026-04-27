@@ -188,9 +188,9 @@
                 placeholder="Enter title..."
               />
             </div>
-            <div style="display: flex; align-items: flex-end">
-              <button class="btn-primary">Search</button>
-            </div>
+          </div>
+          <div>
+            <button class="btn-primary">Search</button>
           </div>
         </div>
         <div class="card">
@@ -228,9 +228,9 @@
               <label for="late-to">Due Date To</label>
               <input type="date" id="late-to" />
             </div>
-            <div style="display: flex; align-items: flex-end">
-              <button class="btn-primary">Search</button>
-            </div>
+          </div>
+          <div>
+            <button class="btn-primary">Search</button>
           </div>
         </div>
         <div class="card">
@@ -281,9 +281,9 @@
                 placeholder="optional"
               />
             </div>
-            <div style="display: flex; align-items: flex-end">
-              <button class="btn-primary">Search</button>
-            </div>
+          </div>
+          <div>
+            <button class="btn-primary">Search</button>
           </div>
           <div class="table-wrapper" style="margin-top: 1rem">
             <table>
@@ -325,9 +325,9 @@
               <label for="fees-book-search">Book ID / Title / Partial</label>
               <input type="text" id="fees-book-search" placeholder="optional" />
             </div>
-            <div style="display: flex; align-items: flex-end">
-              <button class="btn-primary">Search</button>
-            </div>
+          </div>
+          <div>
+            <button class="btn-primary">Search</button>
           </div>
           <div class="table-wrapper" style="margin-top: 1rem">
             <table>
@@ -356,6 +356,7 @@
       const buttons = document.querySelectorAll(".sidebar-btn");
       const panels = document.querySelectorAll(".panel");
 
+      // Toggle displaying
       buttons.forEach((btn) => {
         btn.addEventListener("click", () => {
           buttons.forEach((b) => b.classList.remove("active"));
