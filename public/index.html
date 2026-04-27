@@ -6,6 +6,7 @@
     <title>LMS Rental Project</title>
     <link rel="stylesheet" href="./reset.css" />
     <link rel="stylesheet" href="./styles.css" />
+    <script src="index.js" defer></script>
   </head>
   <body>
     <div class="sidebar">
@@ -167,6 +168,28 @@
             <label for="book-publisher">Publisher</label>
             <select id="book-publisher">
               <option value="">-- select existing --</option>
+              <option value="Allen & Unwin">Allen & Unwin</option>
+              <option value="American Publishing Company">
+                American Publishing Company
+              </option>
+              <option value="Bantam Books">Bantam Books</option>
+              <option value="Chapman and Hall">Chapman and Hall</option>
+              <option value="Chatto & Windus">Chatto & Windus</option>
+              <option value="Doubleday">Doubleday</option>
+              <option value="Faber and Faber">Faber and Faber</option>
+              <option value="Harper & Row">Harper & Row</option>
+              <option value="HarperCollins">HarperCollins</option>
+              <option value="Little, Brown and Company">
+                Little, Brown and Company
+              </option>
+              <option value="Oxford Publisheing">Oxford Publisheing</option>
+              <option value="Pan Books">Pan Books</option>
+              <option value="Penguin Books">Penguin Books</option>
+              <option value="Penguin Classics">Penguin Classics</option>
+              <option value="Random House India">Random House India</option>
+              <option value="Scribner">Scribner</option>
+              <option value="Thomas Cautley Newby">Thomas Cautley Newby</option>
+              <option value="Ward, Lock and Co.">Ward, Lock and Co.</option>
             </select>
           </div>
           <button class="btn-primary">Add to all branches</button>
@@ -190,7 +213,9 @@
             </div>
           </div>
           <div>
-            <button class="btn-primary">Search</button>
+            <button class="btn-primary" onclick="copiesPerBranch()">
+              Search
+            </button>
           </div>
         </div>
         <div class="card">
@@ -351,22 +376,5 @@
       </div>
     </div>
     <!-- end .content -->
-
-    <script>
-      const buttons = document.querySelectorAll(".sidebar-btn");
-      const panels = document.querySelectorAll(".panel");
-
-      // Toggle displaying
-      buttons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          buttons.forEach((b) => b.classList.remove("active"));
-          panels.forEach((p) => p.classList.remove("active"));
-          btn.classList.add("active");
-          document
-            .getElementById("panel-" + btn.dataset.panel)
-            .classList.add("active");
-        });
-      });
-    </script>
   </body>
 </html>
