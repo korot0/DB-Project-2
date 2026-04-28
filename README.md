@@ -1,4 +1,4 @@
-# LMS Rental Project – How to Run
+# LMS Rental Project - How to Run
 
 ## Prerequisites
 - [Node.js](https://nodejs.org/en/download) installed on your machine
