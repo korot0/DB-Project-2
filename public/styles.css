@@ -27,7 +27,7 @@ h2 {
 
 /* Sidebar */
 .sidebar {
-  width: 250px;
+  width: 200px;
   border-right: 2px solid var(--color-border);
 }
 

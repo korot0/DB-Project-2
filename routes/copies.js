@@ -1,3 +1,5 @@
+// 4) Given a book title list the number of copies loaned out per branch.
+
 const db = require("../db.js");
 const express = require("express");
 
@@ -15,7 +17,7 @@ copiesRouter.get("/copies", (req, res) => {
       join library_branch lb on lb.branch_id = bl.branch_id
       where b.title = ?
       group by lb.branch_id;
-`,
+      `,
     )
     .all(title);
 
