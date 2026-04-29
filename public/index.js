@@ -13,43 +13,32 @@ buttons.forEach((btn) => {
   });
 });
 
-// 2) Check out a book and show the updated copy count.
+// 2) Add information about a new Borrower. Do not provide the CardNo in your query. Output the card number as if you are giving a new library card.
 const addBorrower = async () => {
-  const card_no = document.querySelector("#checkout-card").value;
-  const book_id = document.querySelector("#checkout-book").value;
-  const branch_id = document.querySelector("#checkout-branch").value;
-  const date_out = document.querySelector("#checkout-date-out").value;
-  const due_date = document.querySelector("#checkout-due").value;
+  const name = document.querySelector("#borrower-name").value;
+  const address = document.querySelector("#borrower-address").value;
+  const phone = document.querySelector("#borrower-phone").value;
 
-  if (!card_no || !book_id || !branch_id || !date_out || !due_date) {
-    alert("Please fill in all fields");
-    return;
-  }
+  const res = await fetch(`/api/borrower`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name,
+      address,
+      phone,
+    }),
+  });
 
-  try {
-    const res = await fetch("/api/checkout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        card_no: parseInt(card_no),
-        book_id: parseInt(book_id),
-        branch_id: parseInt(branch_id),
-        date_out,
-        due_date,
-      }),
-    });
+  // Display card no
+  const data = await res.json();
+  displayCard(data.card_no);
+};
 
-    const data = await res.json();
-    if (res.ok) {
-      renderCheckoutResult(data);
-    } else {
-      alert("Error: " + (data.error || "Unknown error"));
-    }
-  } catch (err) {
-    alert("Error checking out: " + err.message);
-  }
+const displayCard = (cardNo) => {
+  const cardNoDisplay = document.querySelector("#card-no-display");
+  cardNoDisplay.textContent = `Thank you, here is your library card: ${cardNo}`;
 };
 
 // 3) Add a new Book with publisher (user can use a publisher that already exists) and author information to all 5 branches with 5 copies for each branch. Submit your editable SQL query that your code executes.

@@ -7,7 +7,7 @@ const copiesRouter = require("./routes/copies");
 const checkoutRouter = require("./routes/checkout");
 const feesRouter = require("./routes/fees");
 const lateRouter = require("./routes/late");
-const borrowerRouter = require("./routes/borrower.js");
+const borrowerRouter = require("./routes/borrower");
 const branchesRouter = require("./routes/branches");
 
 const app = express();
