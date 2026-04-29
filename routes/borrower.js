@@ -17,7 +17,7 @@ borrowerRouter.post("/borrower", (req, res) => {
     const cardNo = insertResult.lastInsertRowid;
 
     res.json({
-      message: "Borrower created",
+      message: `Thank you, here is your card: ${cardNo}`,
       card_no: cardNo,
     });
   } catch (err) {

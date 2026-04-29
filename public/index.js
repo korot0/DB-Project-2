@@ -33,12 +33,7 @@ const addBorrower = async () => {
 
   // Display card no
   const data = await res.json();
-  displayCard(data.card_no);
-};
-
-const displayCard = (cardNo) => {
-  const cardNoDisplay = document.querySelector("#card-no-display");
-  cardNoDisplay.textContent = `Thank you, here is your library card: ${cardNo}`;
+  alert(data.message);
 };
 
 // 3) Add a new Book with publisher (user can use a publisher that already exists) and author information to all 5 branches with 5 copies for each branch. Submit your editable SQL query that your code executes.
@@ -88,7 +83,7 @@ const lateReturns = async () => {
   try {
     const res = await fetch(`/api/late?from=${from}&to=${to}`);
     const data = await res.json();
-    
+
     if (res.ok) {
       renderLateResults(data);
     } else {
@@ -111,7 +106,7 @@ const feesSearchBorrower = async () => {
   try {
     const res = await fetch(`/api/fees/borrower?${params}`);
     const data = await res.json();
-    
+
     if (res.ok) {
       renderFeesBorrowerResults(data);
     } else {
@@ -139,7 +134,7 @@ const feesSearchBook = async () => {
   try {
     const res = await fetch(`/api/fees/book?${params}`);
     const data = await res.json();
-    
+
     if (res.ok) {
       renderFeesBookResults(data);
     } else {
@@ -153,31 +148,37 @@ const feesSearchBook = async () => {
 // Render fees borrower results
 const renderFeesBorrowerResults = (rows) => {
   const tbody = document.querySelector("#fees-borrower-results");
-  
+
   if (!rows || rows.length === 0) {
     tbody.innerHTML = `<tr><td colspan="3" class="empty">No results found</td></tr>`;
     return;
   }
-  
-  tbody.innerHTML = rows.map((row) => `
+
+  tbody.innerHTML = rows
+    .map(
+      (row) => `
     <tr>
       <td>${row.borrower_id}</td>
       <td>${row.borrower_name}</td>
       <td>${row.late_fee_balance}</td>
     </tr>
-  `).join("");
+  `,
+    )
+    .join("");
 };
 
 // Render fees book results
 const renderFeesBookResults = (rows) => {
   const tbody = document.querySelector("#fees-book-results");
-  
+
   if (!rows || rows.length === 0) {
     tbody.innerHTML = `<tr><td colspan="5" class="empty">No results found</td></tr>`;
     return;
   }
-  
-  tbody.innerHTML = rows.map((row) => `
+
+  tbody.innerHTML = rows
+    .map(
+      (row) => `
     <tr>
       <td>${row.borrower_id}</td>
       <td>${row.book_title}</td>
@@ -185,19 +186,23 @@ const renderFeesBookResults = (rows) => {
       <td>${row.due_date}</td>
       <td>${row.late_fee}</td>
     </tr>
-  `).join("");
+  `,
+    )
+    .join("");
 };
 
 // Render late returns results
 const renderLateResults = (rows) => {
   const tbody = document.querySelector("#late-results");
-  
+
   if (!rows || rows.length === 0) {
     tbody.innerHTML = `<tr><td colspan="5" class="empty">No late returns found</td></tr>`;
     return;
   }
-  
-  tbody.innerHTML = rows.map((row) => `
+
+  tbody.innerHTML = rows
+    .map(
+      (row) => `
     <tr>
       <td>${row.card_no}</td>
       <td>${row.book_title}</td>
@@ -205,7 +210,9 @@ const renderLateResults = (rows) => {
       <td>${row.returned_date}</td>
       <td>${row.days_late}</td>
     </tr>
-  `).join("");
+  `,
+    )
+    .join("");
 };
 
 // Load branches into dropdown on page load
@@ -214,7 +221,7 @@ const loadBranches = async () => {
     const res = await fetch("/api/branches");
     const branches = await res.json();
     const branchSelect = document.querySelector("#checkout-branch");
-    
+
     branches.forEach((branch) => {
       const option = document.createElement("option");
       option.value = branch.branch_id;
@@ -239,14 +246,22 @@ const renderCheckoutResult = (data) => {
 };
 
 // Wire checkout button
-document.querySelector("#panel-checkout .btn-primary").addEventListener("click", addBorrower);
+document
+  .querySelector("#panel-checkout .btn-primary")
+  .addEventListener("click", addBorrower);
 
 // Wire late returns button
-document.querySelector("#panel-late .btn-primary").addEventListener("click", lateReturns);
+document
+  .querySelector("#panel-late .btn-primary")
+  .addEventListener("click", lateReturns);
 
 // Wire fees borrower and book buttons
-const feesBorrowerButton = document.querySelectorAll("#panel-fees .card .btn-primary")[0];
-const feesBookButton = document.querySelectorAll("#panel-fees .card .btn-primary")[1];
+const feesBorrowerButton = document.querySelectorAll(
+  "#panel-fees .card .btn-primary",
+)[0];
+const feesBookButton = document.querySelectorAll(
+  "#panel-fees .card .btn-primary",
+)[1];
 feesBorrowerButton.addEventListener("click", feesSearchBorrower);
 feesBookButton.addEventListener("click", feesSearchBook);
 
