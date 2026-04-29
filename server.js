@@ -8,6 +8,7 @@ const checkoutRouter = require("./routes/checkout");
 const feesRouter = require("./routes/fees");
 const lateRouter = require("./routes/late");
 const borrowerRouter = require("./routes/borrower.js");
+const branchesRouter = require("./routes/branches");
 
 const app = express();
 const port = 3000;
@@ -22,6 +23,7 @@ app.use("/api", checkoutRouter);
 app.use("/api", feesRouter);
 app.use("/api", lateRouter);
 app.use("/api", borrowerRouter);
+app.use("/api", branchesRouter);
 
 app.use(express.static(path.join(__dirname, "public")));
 
