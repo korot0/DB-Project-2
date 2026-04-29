@@ -62,12 +62,25 @@ const addBook = async () => {
 // 4) Given a book title list the number of copies loaned out per branch.
 const copiesPerBranch = async () => {
   const title = document.querySelector("#copies-title").value;
-
   const res = await fetch(`/api/copies?title=${title}`);
-
-  // TODO: Display data
   const data = await res.json();
-  console.log(data);
+
+  const tbody = document.getElementById("copies-results");
+  if (!data.length) {
+    tbody.innerHTML = `<tr><td colspan="3" class="empty">No results found</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = data
+    .map(
+      (row) => `
+    <tr>
+      <td>${row.branch_id}</td>
+      <td>${row.branch_name}</td>
+      <td>${row.loaned_out}</td>
+    </tr>
+  `,
+    )
+    .join("");
 };
 
 // 5) Given a due date range, list the loans that were returned late, sorted by how late they were and then by due date.
