@@ -41,7 +41,7 @@ bookRouter.post("/book", (req, res) => {
     const bookId = transaction();
 
     res.json({
-      message: "Book created",
+      message: `Book created: ${title}`,
       book_id: bookId,
     });
   } catch (err) {

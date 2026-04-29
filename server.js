@@ -7,9 +7,10 @@ const copiesRouter = require("./routes/copies");
 const checkoutRouter = require("./routes/checkout");
 const feesRouter = require("./routes/fees");
 const lateRouter = require("./routes/late");
+const borrowerRouter = require("./routes/borrower.js");
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 3000;
 
 app.use(cors());
 app.use(express.json());
@@ -20,10 +21,7 @@ app.use("/api", copiesRouter);
 app.use("/api", checkoutRouter);
 app.use("/api", feesRouter);
 app.use("/api", lateRouter);
-
-app.get("/api/health", (req, res) => {
-  res.json({ status: "ok" });
-});
+app.use("/api", borrowerRouter);
 
 app.use(express.static(path.join(__dirname, "public")));
 

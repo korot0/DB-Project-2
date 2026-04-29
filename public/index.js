@@ -16,7 +16,7 @@ buttons.forEach((btn) => {
 // 2) Add information about a new Borrower. Do not provide the CardNo in your query. Output the card number as if you are giving a new library card.
 const addBorrower = async () => {};
 
-// 3) Add a new Book with publisher (use can use a publisher that already exists) and author information to all 5 branches with 5 copies for each branch. Submit your editable SQL query that your code executes.
+// 3) Add a new Book with publisher (user can use a publisher that already exists) and author information to all 5 branches with 5 copies for each branch. Submit your editable SQL query that your code executes.
 const addBook = async () => {
   const title = document.querySelector("#book-title").value;
   const authorName = document.querySelector("#book-author").value;
@@ -34,9 +34,9 @@ const addBook = async () => {
     }),
   });
 
-  // TODO: Display data
+  // Alert data
   const data = await res.json();
-  console.log(data);
+  alert(data.message);
 };
 
 // 4) Given a book title list the number of copies loaned out per branch.
