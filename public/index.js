@@ -109,8 +109,7 @@ const renderCheckoutResult = (data) => {
   tbody.innerHTML = `
     <tr>
       <td>${data.book_id}</td>
-      <td>${data.book_title}</td>
-      <td>${data.branch_name}</td>
+      <td>${data.branch_id}</td>
       <td>${data.no_of_copies}</td>
     </tr>
   `;
