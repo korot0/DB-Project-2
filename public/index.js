@@ -110,6 +110,95 @@ const lateReturns = async () => {
   }
 };
 
+// 6a) Search by borrower to view late fee balance
+const feesSearchBorrower = async () => {
+  const card_no = document.querySelector("#fees-borrower-id").value;
+  const name = document.querySelector("#fees-borrower-name").value;
+
+  const params = new URLSearchParams();
+  if (card_no) params.append("card_no", card_no);
+  if (name) params.append("name", name);
+
+  try {
+    const res = await fetch(`/api/fees/borrower?${params}`);
+    const data = await res.json();
+    
+    if (res.ok) {
+      renderFeesBorrowerResults(data);
+    } else {
+      alert("Error: " + (data.error || "Unknown error"));
+    }
+  } catch (err) {
+    alert("Error searching fees: " + err.message);
+  }
+};
+
+// 6b) Search by book to view late fees for a borrower
+const feesSearchBook = async () => {
+  const card_no = document.querySelector("#fees-book-borrower").value;
+  const search = document.querySelector("#fees-book-search").value;
+
+  if (!card_no) {
+    alert("Borrower ID is required");
+    return;
+  }
+
+  const params = new URLSearchParams();
+  params.append("card_no", card_no);
+  if (search) params.append("search", search);
+
+  try {
+    const res = await fetch(`/api/fees/book?${params}`);
+    const data = await res.json();
+    
+    if (res.ok) {
+      renderFeesBookResults(data);
+    } else {
+      alert("Error: " + (data.error || "Unknown error"));
+    }
+  } catch (err) {
+    alert("Error searching fees: " + err.message);
+  }
+};
+
+// Render fees borrower results
+const renderFeesBorrowerResults = (rows) => {
+  const tbody = document.querySelector("#fees-borrower-results");
+  
+  if (!rows || rows.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="3" class="empty">No results found</td></tr>`;
+    return;
+  }
+  
+  tbody.innerHTML = rows.map((row) => `
+    <tr>
+      <td>${row.borrower_id}</td>
+      <td>${row.borrower_name}</td>
+      <td>${row.late_fee_balance}</td>
+    </tr>
+  `).join("");
+};
+
+// Render fees book results
+const renderFeesBookResults = (rows) => {
+  const tbody = document.querySelector("#fees-book-results");
+  
+  if (!rows || rows.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" class="empty">No results found</td></tr>`;
+    return;
+  }
+  
+  tbody.innerHTML = rows.map((row) => `
+    <tr>
+      <td>${row.borrower_id}</td>
+      <td>${row.book_title}</td>
+      <td>${row.date_out}</td>
+      <td>${row.due_date}</td>
+      <td>${row.late_fee}</td>
+    </tr>
+  `).join("");
+};
+
 // Render late returns results
 const renderLateResults = (rows) => {
   const tbody = document.querySelector("#late-results");
@@ -165,6 +254,12 @@ document.querySelector("#panel-checkout .btn-primary").addEventListener("click",
 
 // Wire late returns button
 document.querySelector("#panel-late .btn-primary").addEventListener("click", lateReturns);
+
+// Wire fees borrower and book buttons
+const feesBorrowerButton = document.querySelectorAll("#panel-fees .card .btn-primary")[0];
+const feesBookButton = document.querySelectorAll("#panel-fees .card .btn-primary")[1];
+feesBorrowerButton.addEventListener("click", feesSearchBorrower);
+feesBookButton.addEventListener("click", feesSearchBook);
 
 // Load branches when page loads
 loadBranches();

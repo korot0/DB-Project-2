@@ -3,16 +3,8 @@ const express = require("express");
 
 const router = express.Router();
 
-const lateFeeExpression = `
-	CASE
-		WHEN BL.returned_date IS NULL AND BL.due_date < DATE('now')
-			THEN (julianday(DATE('now')) - julianday(BL.due_date)) * 0.25
-		WHEN BL.returned_date IS NOT NULL AND BL.returned_date > BL.due_date
-			THEN (julianday(BL.returned_date) - julianday(BL.due_date)) * 0.25
-		ELSE 0
-	END
-`;
-
+// GET /api/fees/borrower - List borrowers with total late fee balance
+// Searchable by borrower ID, name, or part of name. No filters returns all ordered by balance.
 router.get("/fees/borrower", (req, res) => {
 	const card_no = req.query.card_no ?? "";
 	const name = req.query.name ?? "";
@@ -20,13 +12,13 @@ router.get("/fees/borrower", (req, res) => {
 	const conditions = [];
 	const params = [];
 
-		if (card_no) {
-			conditions.push("B.card_no = ?");
-			params.push(Number(card_no));
+	if (card_no) {
+		conditions.push('"Card_No" = ?');
+		params.push(Number(card_no));
 	}
 
 	if (name) {
-		conditions.push("B.name LIKE ?");
+		conditions.push('"Borrower Name" LIKE ?');
 		params.push(`%${name}%`);
 	}
 
@@ -35,41 +27,45 @@ router.get("/fees/borrower", (req, res) => {
 	const rows = db
 		.prepare(
 			`
-SELECT
-	B.card_no,
-	B.name,
-	ROUND(COALESCE(SUM(${lateFeeExpression}), 0), 2) AS late_fee_balance
-FROM BORROWER B
-LEFT JOIN BOOK_LOANS BL ON BL.card_no = B.card_no
-${whereClause}
-GROUP BY B.card_no, B.name
-ORDER BY late_fee_balance DESC, B.card_no;
-`,
+            SELECT
+				"Card_No" AS borrower_id,
+				"Borrower Name" AS borrower_name,
+				printf('$%.2f', COALESCE(SUM(LateFeeBalance), 0)) AS late_fee_balance
+            FROM vBookLoanInfo
+            ${whereClause}
+            GROUP BY "Card_No", "Borrower Name"
+            ORDER BY COALESCE(SUM(LateFeeBalance), 0) DESC, "Card_No";
+            `,
 		)
 		.all(...params);
 
 	res.json(rows);
 });
 
+// GET /api/fees/book - List books with late fees for a borrower
+// Requires borrower ID. Optional search by book ID, title, or part of title.
+// No filters returns all ordered by highest late fee.
 router.get("/fees/book", (req, res) => {
 	const borrower_id = Number(req.query.card_no ?? req.query.borrower_id);
 	const search = req.query.search ?? req.query.book ?? req.query.title ?? "";
 
-if (!borrower_id) {
-			return res.status(400).json({ error: "borrower id is required" });
-		}
+	if (!borrower_id) {
+		return res.status(400).json({ error: "borrower_id (card_no) is required" });
+	}
 
-		const conditions = ["BL.card_no = ?"];
-		const params = [borrower_id];
+	const conditions = ['"Card_No" = ?'];
+	const params = [borrower_id];
 
 	if (search) {
 		const numericSearch = Number(search);
 
 		if (Number.isFinite(numericSearch) && String(numericSearch) === String(search).trim()) {
-			conditions.push("B.book_id = ?");
+			// Search by book_id (numeric)
+			conditions.push("book_id = ?");
 			params.push(numericSearch);
 		} else {
-			conditions.push("B.title LIKE ?");
+			// Search by book title (text)
+			conditions.push('"Book Title" LIKE ?');
 			params.push(`%${search}%`);
 		}
 	}
@@ -78,15 +74,18 @@ if (!borrower_id) {
 		.prepare(
 			`
 SELECT
-	BL.card_no,
-	B.title AS book_title,
-	BL.date_out,
-	BL.due_date,
-	ROUND(${lateFeeExpression}, 2) AS late_fee
-FROM BOOK_LOANS BL
-JOIN BOOK B ON B.book_id = BL.book_id
+	"Card_No" AS borrower_id,
+	"Book Title" AS book_title,
+	"Date_Out" AS date_out,
+	"Due_Date" AS due_date,
+	"Number of days returned late" AS days_late,
+	CASE
+		WHEN LateFeeBalance IS NULL OR LateFeeBalance <= 0 THEN 'Non-Applicable'
+		ELSE printf('$%.2f', LateFeeBalance)
+	END AS late_fee
+FROM vBookLoanInfo
 WHERE ${conditions.join(" AND ")}
-ORDER BY BL.date_out DESC, B.title;
+ORDER BY COALESCE(LateFeeBalance, 0) DESC, "Date_Out" DESC;
 `,
 		)
 		.all(...params);
