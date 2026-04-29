@@ -100,7 +100,7 @@
               <input
                 type="text"
                 id="borrower-phone"
-                placeholder="(555) 000-0000"
+                placeholder="555-000-0000"
               />
             </div>
           </div>
@@ -112,7 +112,10 @@
               placeholder="Street, City, State ZIP"
             />
           </div>
-          <button class="btn-primary">Register borrower</button>
+          <button class="btn-primary" onclick="addBorrower()">
+            Register borrower
+          </button>
+          <span id="card-no-display"></span>
         </div>
       </div>
 

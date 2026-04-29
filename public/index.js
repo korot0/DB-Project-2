@@ -14,7 +14,32 @@ buttons.forEach((btn) => {
 });
 
 // 2) Add information about a new Borrower. Do not provide the CardNo in your query. Output the card number as if you are giving a new library card.
-const addBorrower = async () => {};
+const addBorrower = async () => {
+  const name = document.querySelector("#borrower-name").value;
+  const address = document.querySelector("#borrower-address").value;
+  const phone = document.querySelector("#borrower-phone").value;
+
+  const res = await fetch(`/api/borrower`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name,
+      address,
+      phone,
+    }),
+  });
+
+  // Display card no
+  const data = await res.json();
+  displayCard(data.card_no);
+};
+
+const displayCard = (cardNo) => {
+  const cardNoDisplay = document.querySelector("#card-no-display");
+  cardNoDisplay.textContent = `Thank you, here is your library card: ${cardNo}`;
+};
 
 // 3) Add a new Book with publisher (user can use a publisher that already exists) and author information to all 5 branches with 5 copies for each branch. Submit your editable SQL query that your code executes.
 const addBook = async () => {
