@@ -85,6 +85,51 @@ const copiesPerBranch = async () => {
   const data = await res.json();
   console.log(data);
 };
+
+// 5) Given a due date range, list the loans that were returned late, sorted by how late they were and then by due date.
+const lateReturns = async () => {
+  const from = document.querySelector("#late-from").value;
+  const to = document.querySelector("#late-to").value;
+
+  if (!from || !to) {
+    alert("Please select both From and To dates");
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/late?from=${from}&to=${to}`);
+    const data = await res.json();
+    
+    if (res.ok) {
+      renderLateResults(data);
+    } else {
+      alert("Error: " + (data.error || "Unknown error"));
+    }
+  } catch (err) {
+    alert("Error fetching late returns: " + err.message);
+  }
+};
+
+// Render late returns results
+const renderLateResults = (rows) => {
+  const tbody = document.querySelector("#late-results");
+  
+  if (!rows || rows.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" class="empty">No late returns found</td></tr>`;
+    return;
+  }
+  
+  tbody.innerHTML = rows.map((row) => `
+    <tr>
+      <td>${row.card_no}</td>
+      <td>${row.book_title}</td>
+      <td>${row.due_date}</td>
+      <td>${row.returned_date}</td>
+      <td>${row.days_late}</td>
+    </tr>
+  `).join("");
+};
+
 // Load branches into dropdown on page load
 const loadBranches = async () => {
   try {
@@ -117,6 +162,9 @@ const renderCheckoutResult = (data) => {
 
 // Wire checkout button
 document.querySelector("#panel-checkout .btn-primary").addEventListener("click", addBorrower);
+
+// Wire late returns button
+document.querySelector("#panel-late .btn-primary").addEventListener("click", lateReturns);
 
 // Load branches when page loads
 loadBranches();

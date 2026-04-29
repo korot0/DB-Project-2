@@ -15,15 +15,15 @@ router.post("/checkout", (req, res) => {
 
 	try {
 		db.prepare(
-			`INSERT INTO BOOK_LOANS (book_id, branch_id, card_no, date_out, due_date)
-			 VALUES (?, ?, ?, ?, ?)`,
+			`INSERT INTO BOOK_LOANS (book_id, branch_id, card_no, date_out, due_date, Late)
+			 VALUES (?, ?, ?, ?, ?, 0)`,
 		).run(book_id, branch_id, card_no, date_out, due_date);
 
 		const updatedCopies = db
 			.prepare(
 				`SELECT book_id, branch_id, no_of_copies
-				 FROM BOOK_COPIES
-				 WHERE book_id = ? AND branch_id = ?`,
+                 FROM BOOK_COPIES
+                 WHERE book_id = ? AND branch_id = ?`,
 			)
 			.get(book_id, branch_id);
 
